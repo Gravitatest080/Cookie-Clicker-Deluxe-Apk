@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cookie Clicker Deluxe</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap">
+<style>
+:root{--bg1:#4a2f1d;--bg2:#1d1511;--panel:#2c2019;--panel2:#3a2a20;--line:#6b4a33;--gold:#ffc857;--text:#fff0ce;--muted:#c8b8a4;--green:#86d993;--ink:#2b1a0d;--shadow:#0006;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:light){:root:not([data-theme=dark]){--bg1:#ffe9bf;--bg2:#f5d9a8;--panel:#fff6e3;--panel2:#ffeac4;--line:#d9b27c;--gold:#b86a00;--text:#3b2412;--muted:#7b624b;--green:#2f8a42;--ink:#fff6e3;--shadow:#6b3f1a33;color-scheme:light}}
+:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box}html{height:100%}
+body{margin:0;min-height:100%;color:var(--text);font:16px/1.4 Fredoka,system-ui,-apple-system,sans-serif;background:radial-gradient(ellipse at 50% -10%,var(--bg1),var(--bg2) 70%) fixed;-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation}button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.top{position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 18px;background:color-mix(in srgb,var(--panel) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.brand{font-weight:700;font-size:1.25rem;color:var(--gold);letter-spacing:.02em}.brand small{color:var(--muted);font-weight:500}
+.acts{display:flex;gap:6px;flex-wrap:wrap}
+.sb,.tab{border:1px solid var(--line);background:var(--panel2);border-radius:999px;padding:7px 14px;transition:.15s}.sb:hover,.tab:hover{filter:brightness(1.15)}
+.tab.on{background:var(--gold);color:var(--ink);border-color:var(--gold);font-weight:600}
+main{max-width:1320px;margin:auto;padding:18px;display:grid;grid-template-columns:minmax(290px,1fr) minmax(320px,1.1fr) minmax(300px,1fr);gap:16px}
+.panel{background:linear-gradient(165deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:22px;padding:18px;box-shadow:0 14px 30px var(--shadow);min-width:0}
+h2{margin:0 0 4px;font-size:1.05rem;color:var(--gold);letter-spacing:.08em;text-transform:uppercase}.muted{color:var(--muted)}.sm{font-size:.85rem}
+.stats{text-align:center}
+.big{font-size:clamp(2.2rem,5vw,3.4rem);font-weight:700;color:var(--gold);line-height:1.05;overflow-wrap:anywhere;text-shadow:0 3px 0 var(--shadow)}
+.sub{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin:8px 0;color:var(--muted)}.sub b{color:var(--text)}
+.buffs{min-height:30px;display:flex;gap:6px;justify-content:center;flex-wrap:wrap}.buff{background:var(--gold);color:var(--ink);font-weight:600;border-radius:99px;padding:2px 12px;font-size:.85rem;animation:pulse 1s infinite alternate}
+.stage{height:300px;display:grid;place-items:center;position:relative;overflow:hidden;border-radius:18px}
+.stage:before{content:"";position:absolute;width:300px;height:300px;border-radius:50%;background:conic-gradient(from 0deg,#ffc85722,transparent 20%,#ffc85722 40%,transparent 60%,#ffc85722 80%,transparent);animation:spin 18s linear infinite}
+.cookie{width:210px;height:210px;border:0;border-radius:50%;position:relative;user-select:none;background:radial-gradient(circle at 35% 28%,#f9d78b 0,#d9953d 58%,#8e4b20 100%);box-shadow:inset -12px -15px 0 #6d371c55,inset 7px 7px 0 #ffe9a255,0 12px 0 #66351d,0 22px 30px #0008;transition:transform .07s}
+.cookie:before{content:"";position:absolute;inset:12px;border-radius:50%;border:3px dashed #7b411e66}.cookie:active,.cookie.hit{transform:scale(.93) rotate(-2deg)}
+.chip{position:absolute;width:23px;height:16px;background:#542b20;border-radius:45%;box-shadow:inset 2px 2px 2px #fff2}
+.c1{left:45px;top:48px;transform:rotate(20deg)}.c2{right:47px;top:67px;transform:rotate(-35deg)}.c3{left:85px;top:96px;transform:rotate(65deg)}.c4{left:43px;bottom:47px;transform:rotate(-20deg)}.c5{right:39px;bottom:40px;transform:rotate(25deg)}.c6{right:75px;top:35px;transform:rotate(10deg)}.c7{left:75px;bottom:28px;transform:rotate(50deg)}
+.gold{position:absolute;z-index:4;display:none;width:70px;height:70px;border:0;border-radius:50%;font-size:2.5rem;background:radial-gradient(circle at 35% 25%,#fff9a6,#ffc928 48%,#d88400);box-shadow:0 0 14px #ffe86b,0 0 36px #ffb000aa;animation:pulse 1s ease-in-out infinite alternate}
+@keyframes pulse{to{transform:scale(1.12) rotate(10deg)}}@keyframes spin{to{transform:rotate(360deg)}}
+.float{position:absolute;z-index:3;font-weight:700;font-size:1.4rem;color:#fff2b6;text-shadow:0 2px 5px #4d240b;pointer-events:none;animation:rise .85s ease-out forwards}@keyframes rise{to{transform:translateY(-90px);opacity:0}}
+.crumb{position:absolute;z-index:2;width:8px;height:8px;border-radius:50%;background:#c9822f;pointer-events:none;animation:crumb .6s ease-out forwards}@keyframes crumb{to{transform:translate(var(--dx),var(--dy));opacity:0}}
+.bar{height:10px;background:#0004;border-radius:99px;overflow:hidden;margin:6px 0 12px}.bar span{display:block;height:100%;width:0;background:linear-gradient(90deg,#db8d32,#ffe08a);transition:width .2s}
+.notice{padding:11px 13px;border-radius:14px;background:#0003;border:1px solid var(--line);min-height:46px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 12px}
+.list{display:grid;gap:8px;max-height:640px;overflow-y:auto;padding-right:2px}
+.item{display:grid;grid-template-columns:44px 1fr auto;gap:10px;align-items:center;text-align:left;width:100%;padding:10px;border:1px solid var(--line);border-radius:14px;background:var(--panel);transition:.15s}
+.item:hover:not(:disabled){transform:translateY(-1px);background:var(--panel2)}.item:disabled{opacity:.5;cursor:not-allowed}.item.afford{border-color:var(--gold)}
+.ic{font-size:1.9rem;text-align:center}.nm{font-weight:600}.price{font-weight:700;color:var(--gold);white-space:nowrap}.own{color:var(--green);font-size:.8rem}
+.ach,.quest{padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--panel)}.ach.done{border-color:var(--green)}.ach .st{float:right;font-size:.75rem;color:var(--muted)}.ach.done .st{color:var(--green)}
+.quest{display:flex;justify-content:space-between;align-items:center;gap:10px}.quest button,.play{border:1px solid var(--gold);background:var(--gold);color:var(--ink);border-radius:10px;padding:7px 14px;font-weight:600}.quest button:disabled,.play:disabled{opacity:.45;background:transparent;color:var(--muted);border-color:var(--line);cursor:default}
+.game{display:grid;grid-template-columns:48px 1fr auto;gap:10px;align-items:center;padding:12px;border:1px solid var(--line);border-radius:14px;background:var(--panel)}
+.prestige{margin-top:14px;padding:13px;border:1px solid var(--gold);border-radius:16px;background:linear-gradient(135deg,var(--panel2),var(--panel))}
+.prestige button{margin-top:8px;width:100%;border:1px solid var(--gold);background:var(--gold);color:var(--ink);border-radius:10px;padding:9px;font-weight:700}.prestige button:disabled{opacity:.4;cursor:not-allowed}
+.modal{position:fixed;inset:0;z-index:50;background:#000b;display:none;place-items:center;padding:14px}.modal.show{display:grid}
+.box{width:min(520px,100%);background:linear-gradient(165deg,var(--panel2),var(--panel));border:2px solid var(--gold);border-radius:24px;padding:18px;text-align:center}
+.arena{position:relative;height:340px;overflow:hidden;border-radius:16px;background:#0004;margin:10px 0;touch-action:manipulation}
+.drop{position:absolute;top:-50px;border:0;background:none;font-size:2.4rem;animation:fall linear forwards;padding:4px}@keyframes fall{to{top:350px}}
+.track{position:relative;height:46px;border-radius:12px;background:#0005;margin:26px 0;overflow:hidden}.zone{position:absolute;top:0;bottom:0;background:#86d99366;border-inline:3px solid var(--green)}.zone i{position:absolute;left:35%;right:35%;top:0;bottom:0;background:#ffc85799}.mark{position:absolute;top:-3px;bottom:-3px;width:6px;background:#fff;border-radius:3px;box-shadow:0 0 10px #fff}
+.wheelwrap{position:relative;width:240px;height:240px;margin:12px auto}.wheel{width:100%;height:100%;border-radius:50%;border:6px solid var(--gold);transition:transform 4s cubic-bezier(.12,.7,.1,1);position:relative;background:conic-gradient(#d9953d 0 60deg,#8e4b20 0 120deg,#e9b257 0 180deg,#6d371c 0 240deg,#c9822f 0 300deg,#f9d78b 0 360deg)}
+.wheel b{position:absolute;left:50%;top:50%;font-size:1.6rem;transform:rotate(var(--r)) translateY(-84px) translateX(-50%);transform-origin:0 0}
+.ptr{position:absolute;left:50%;top:-12px;transform:translateX(-50%);font-size:2rem;z-index:2}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,120px);background:var(--gold);color:var(--ink);padding:10px 18px;border-radius:99px;font-weight:600;z-index:60;transition:.3s;max-width:90vw;text-align:center}.toast.show{transform:translate(-50%,0)}
+footer{text-align:center;color:var(--muted);padding:0 16px 22px;font-size:.85rem}
+@media(max-width:1000px){main{grid-template-columns:1fr 1fr}.shop{grid-column:1/-1;grid-row:2}.side{grid-column:2;grid-row:1}}
+@media(max-width:650px){main{grid-template-columns:1fr;padding:10px;gap:10px}.shop,.side{grid-column:auto;grid-row:auto}.panel{padding:14px;border-radius:18px}.stage{height:250px}.cookie{width:180px;height:180px}.list{max-height:none}.sb{flex:1}.acts{width:100%}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<header class="top"><div class="brand">🍪 Cookie Clicker <small>Deluxe</small></div><div class="acts"><button class="sb" id="saveBtn">💾 Save</button><button class="sb" id="soundBtn">🔇 Sound</button><button class="sb" id="resetBtn">Reset</button></div></header>
+<main>
+<section class="panel stats">
+<h2>Your Bakery</h2>
+<div class="big" id="cookies">0 cookies</div>
+<div class="sub"><span>🍪 <b id="cps">0</b>/sec</span><span>👆 <b id="cp">1</b>/click</span><span>✨ <b id="pc">0</b> chips</span></div>
+<div class="buffs" id="buffs"></div>
+<div class="stage" id="stage"><button class="cookie" id="cookie" aria-label="Bake a cookie"><i class="chip c1"></i><i class="chip c2"></i><i class="chip c3"></i><i class="chip c4"></i><i class="chip c5"></i><i class="chip c6"></i><i class="chip c7"></i></button><button class="gold" id="golden" aria-label="Golden cookie">🍪</button></div>
+<div style="text-align:left"><div style="display:flex;justify-content:space-between"><span class="muted">Next milestone</span><b id="mile">10</b></div><div class="bar"><span id="pbar"></span></div></div>
+<div class="notice" id="notice">Welcome, baker! Your first cookie is waiting.</div>
+</section>
+<section class="panel shop">
+<h2>Bakery shop</h2><div class="muted sm">Prices rise as you buy. Golden border = you can afford it.</div>
+<div class="tabs" id="shopTabs"><button class="tab on" data-t="buildings">Buildings</button><button class="tab" data-t="upgrades">Upgrades</button><button class="tab" data-t="all">All</button></div>
+<div class="list" id="shopList"></div>
+</section>
+<section class="panel side">
+<div class="tabs" id="sideTabs" style="margin-top:0"><button class="tab on" data-t="games">🎮 Mini-games</button><button class="tab" data-t="goals">🎯 Goals</button><button class="tab" data-t="trophies">🏆 Trophies</button></div>
+<div class="list" id="sideList" style="max-height:480px"></div>
+<div class="prestige"><b>✨ Heavenly Chips</b><div class="muted sm" id="pInfo"></div><button id="ascend" disabled>Ascend</button></div>
+</section>
+</main>
+<footer>Autosaves in this browser. Tip: tap golden cookies fast, and play mini-games whenever they're ready!</footer>
+<div class="modal" id="modal"><div class="box" id="box"></div></div>
+<div class="toast" id="toast"></div>
+<script>
+const $=id=>document.getElementById(id),KEY='ultimateCookieSave';
+const B=[
+{id:'cursor',name:'Cursor',icon:'👆',desc:'+1 cookie per click, each.',base:15,cps:0},
+{id:'grandma',name:'Grandma',icon:'👵',desc:'Bakes cookies with love.',base:100,cps:1},
+{id:'farm',name:'Cookie farm',icon:'🌾',desc:'Grows cookie dough from the earth.',base:1100,cps:8},
+{id:'mine',name:'Cookie mine',icon:'⛏️',desc:'Digs up delicious deposits.',base:12000,cps:47},
+{id:'factory',name:'Factory',icon:'🏭',desc:'Mass-produces fresh cookies.',base:130000,cps:260},
+{id:'bank',name:'Cookie bank',icon:'🏦',desc:'Makes your cookies work for you.',base:1400000,cps:1400},
+{id:'temple',name:'Cookie temple',icon:'🛕',desc:'Prays for a bountiful harvest.',base:20000000,cps:7800},
+{id:'portal',name:'Cookie portal',icon:'🌀',desc:'Opens a portal to the Cookie Dimension.',base:330000000,cps:44000},
+{id:'wizard',name:'Wizard tower',icon:'🧙',desc:'Conjures cookies out of thin air.',base:5100000000,cps:260000}];
+const U=[
+{id:'finger',name:'Reinforced finger',icon:'💪',desc:'Click power ×2.',base:50,type:'click',factor:2},
+{id:'ovenmitt',name:'Oven mitts',icon:'🧤',desc:'Click power ×2 again.',base:500,type:'click',factor:2},
+{id:'golden',name:'Golden dough',icon:'✨',desc:'All production ×1.5.',base:1000,type:'global',factor:1.5},
+{id:'turbo',name:'Turbo ovens',icon:'🔥',desc:'All production ×2.',base:15000,type:'global',factor:2},
+{id:'robot',name:'Robot bakers',icon:'🤖',desc:'All production ×2.',base:250000,type:'global',factor:2},
+{id:'ambi',name:'Ambidextrous',icon:'🤲',desc:'Each Cursor gives +2 per click instead of +1.',base:800,type:'cursor',factor:1},
+{id:'cosmic',name:'Cosmic recipe',icon:'🌌',desc:'All production ×3.',base:5000000,type:'global',factor:3}];
+const fresh=()=>{const s={cookies:0,total:0,lifetime:0,clicks:0,clickPower:1,multiplier:1,prestige:0,buildings:{},bought:{},unlocked:[],sound:false,cd:{},best:{},buff:null,last:Date.now()};B.forEach(b=>s.buildings[b.id]=0);return s};
+let S=fresh(),shopTab='buildings',sideTab='games',sig='',gT,gH,nT,tT;
+const STEP=1e6,pAvail=()=>Math.max(0,Math.floor(Math.sqrt((S.lifetime||S.total)/STEP))-S.prestige);
+function fmt(n){if(n<1000)return Math.floor(n).toLocaleString();const u=['K','M','B','T','Qa','Qi','Sx','Sp','Oc','No','Dc'];let i=-1;while(n>=1000&&i<u.length-1){n/=1000;i++}return n.toFixed(n<10?2:1)+u[i]}
+const buffMult=()=>S.buff&&S.buff.until>Date.now()?S.buff.mult:1;
+const cpc=()=>S.clickPower+S.buildings.cursor*(S.bought.ambi?2:1);
+const cps=()=>B.reduce((s,b)=>s+S.buildings[b.id]*b.cps,0)*S.multiplier*buffMult();
+const cost=(i)=>i.cps!==undefined?Math.ceil(i.base*Math.pow(1.15,S.buildings[i.id])):i.base;
+function gain(n){S.cookies+=n;S.total+=n;S.lifetime=(S.lifetime||0)+n}
+function say(m){$('notice').textContent=m;toast(m)}
+function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(tT);tT=setTimeout(()=>t.classList.remove('show'),2400)}
+let ac;function audio(){try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();if(ac.state!=='running')ac.resume()}catch(e){}return ac}
+function beep(f=520,d=.08,type='sine',v=.07){if(!S.sound)return;const c=audio();if(!c)return;const go=()=>{try{const o=c.createOscillator(),g=c.createGain(),t=c.currentTime;o.type=type;o.frequency.setValueAtTime(f,t);g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+d+.02)}catch(e){}};c.state==='running'?go():c.resume().then(go).catch(()=>{})}
+['pointerdown','pointerup','touchend','click','keydown'].forEach(ev=>document.addEventListener(ev,()=>{if(S.sound)audio()},{passive:true}));
+function fx(text,x,y){const st=$('stage'),r=st.getBoundingClientRect(),px=x-r.left,py=y-r.top;const e=document.createElement('span');e.className='float';e.textContent=text;e.style.left=(px-14)+'px';e.style.top=(py-20)+'px';st.appendChild(e);setTimeout(()=>e.remove(),900);for(let i=0;i<5;i++){const c=document.createElement('i');c.className='crumb';c.style.left=px+'px';c.style.top=py+'px';c.style.setProperty('--dx',(Math.random()*90-45)+'px');c.style.setProperty('--dy',(Math.random()*70-20)+'px');st.appendChild(c);setTimeout(()=>c.remove(),650)}}
+function click(e){const r=$('cookie').getBoundingClientRect(),x=e.clientX||r.left+r.width/2,y=e.clientY||r.top+r.height/2,p=cpc()*(buffMult()>1?buffMult():1);gain(p);S.clicks++;fx('+'+fmt(p),x,y);beep(380+Math.random()*160,.05,'triangle');check();paint()}
+$('cookie').addEventListener('pointerdown',e=>{e.preventDefault();$('cookie').classList.add('hit');click(e)});
+['pointerup','pointerleave','pointercancel'].forEach(t=>$('cookie').addEventListener(t,()=>$('cookie').classList.remove('hit')));
+$('cookie').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();click({})}});
+$('cookie').addEventListener('click',e=>e.preventDefault());
+function buy(i){const p=cost(i);if(S.cookies<p)return;if(i.cps!==undefined){S.cookies-=p;S.buildings[i.id]++;say(`${i.name} bought! Now ${S.buildings[i.id]} owned.`)}else{if(S.bought[i.id])return;S.cookies-=p;S.bought[i.id]=true;i.type==='click'?S.clickPower*=i.factor:S.multiplier*=i.factor;say(i.name+' unlocked!')}beep(660,.12,'square',.04);check();paint(true)}
+function shop(){const items=[...B.map(x=>({...x,k:'buildings'})),...U.map(x=>({...x,k:'upgrades'}))].filter(x=>shopTab==='all'||shopTab===x.k);const l=$('shopList');l.innerHTML='';items.forEach(i=>{const b=i.cps!==undefined,p=cost(i),done=!b&&S.bought[i.id],ok=S.cookies>=p&&!done,el=document.createElement('button');el.className='item'+(ok?' afford':'');el.disabled=!ok;el.innerHTML=`<span class="ic">${i.icon}</span><span><span class="nm">${i.name}</span><br><span class="muted sm">${i.desc}${b&&i.cps?' +'+fmt(i.cps*S.multiplier)+'/s each':''}</span><br><span class="own">${b?'Owned: '+S.buildings[i.id]:done?'Purchased':'One-time upgrade'}</span></span><span class="price">${done?'OWNED':fmt(p)+' 🍪'}</span>`;el.onclick=()=>buy(i);l.appendChild(el)})}
+const A=[['first','First bite','Bake your first cookie',s=>s.total>=1],['hundred','Getting started','Bake 100 cookies',s=>s.total>=100],['thousand','Cookie stash','Bake 1,000 cookies',s=>s.total>=1e3],['tenk','Cookie collector','Bake 10,000 cookies',s=>s.total>=1e4],['clicks','Click enthusiast','Click 100 times',s=>s.clicks>=100],['builder','Construction crew','Own 10 buildings',s=>B.reduce((n,b)=>n+s.buildings[b.id],0)>=10],['million','Millionaire baker','Bake 1 million cookies',s=>s.total>=1e6],['factory','Industrial revolution','Own a factory',s=>s.buildings.factory>=1],['player','Game on!','Play any mini-game',s=>Object.keys(s.cd||{}).length>0],['perfect','Perfectionist','Get a perfect bake',s=>(s.best.perfect||0)>0],['cur10','Click-happy','Own 10 Cursors',s=>s.buildings.cursor>=10],['cur50','Finger frenzy','Own 50 Cursors',s=>s.buildings.cursor>=50],['wizard','Cookie magic','Own a Wizard tower',s=>s.buildings.wizard>=1]];
+function check(){A.forEach(a=>{if(!S.unlocked.includes(a[0])&&a[3](S)){S.unlocked.push(a[0]);say('🏆 Achievement: '+a[1]+'!');beep(880,.25,'triangle')}})}
+const Q=[{id:'q1',name:'Bake 50 cookies',goal:50,reward:25,p:()=>S.total},{id:'q2',name:'Buy 3 buildings',goal:3,reward:100,p:()=>B.reduce((n,b)=>n+S.buildings[b.id],0)},{id:'q3',name:'Reach 100 cookies/sec',goal:100,reward:500,p:()=>cps()},{id:'q4',name:'Win a Cookie Catch of 15+',goal:15,reward:2000,p:()=>S.best.catch||0}];
+function side(){const l=$('sideList');l.innerHTML='';document.querySelectorAll('#sideTabs .tab').forEach(t=>t.classList.toggle('on',t.dataset.t===sideTab));
+if(sideTab==='trophies')A.forEach(a=>{const d=S.unlocked.includes(a[0]),e=document.createElement('div');e.className='ach'+(d?' done':'');e.innerHTML=`<span class="st">${d?'UNLOCKED':'LOCKED'}</span><b>${d?'🏆':'🔒'} ${a[1]}</b><div class="muted sm">${a[2]}</div>`;l.appendChild(e)});
+else if(sideTab==='goals')Q.forEach(q=>{const d=S.bought['quest_'+q.id],pr=Math.min(q.p(),q.goal),e=document.createElement('div');e.className='quest';e.innerHTML=`<div><b>${q.name}</b><div class="muted sm">${fmt(pr)} / ${fmt(q.goal)} · Reward ${fmt(q.reward)} 🍪</div></div>`;const b=document.createElement('button');b.textContent=d?'Claimed':'Claim';b.disabled=d||pr<q.goal;b.onclick=()=>{S.bought['quest_'+q.id]=true;gain(q.reward);say('Goal complete! +'+fmt(q.reward)+' cookies.');paint(true)};e.appendChild(b);l.appendChild(e)});
+else GAMES.forEach(g=>{const rem=Math.max(0,(S.cd[g.id]||0)-Date.now()),e=document.createElement('div');e.className='game';e.innerHTML=`<span class="ic">${g.icon}</span><div><b>${g.name}</b><div class="muted sm">${g.desc}</div>${g.best?`<div class="own">${g.best()}</div>`:''}</div>`;const b=document.createElement('button');b.className='play';b.dataset.g=g.id;b.disabled=rem>0;b.textContent=rem>0?Math.ceil(rem/1000)+'s':'Play';b.onclick=()=>g.run();e.appendChild(b);l.appendChild(e)})}
+function paint(force){const ch=pAvail();$('pc').textContent=fmt(S.prestige);$('pInfo').textContent=ch>0?`Ready for ${ch} chip(s). Each chip = +10% production permanently.`:`Bake ${fmt(Math.pow(S.prestige+1,2)*STEP)} lifetime cookies for your next chip. Bonus: +${S.prestige*10}%.`;$('ascend').disabled=ch<=0;$('ascend').textContent=ch>0?`Ascend for ${ch} chip${ch>1?'s':''} ✨`:'Ascend (not ready)';
+$('cookies').textContent=fmt(S.cookies)+' cookies';$('cps').textContent=fmt(cps());$('cp').textContent=fmt(cpc());
+const ms=[10,50,100,500,1e3,5e3,1e4,5e4,1e5,1e6,1e7,1e8,1e9,1e10,1e12],n=ms.find(x=>S.total<x)||S.total*2;$('mile').textContent=fmt(n)+' baked';$('pbar').style.width=Math.min(100,S.total/n*100)+'%';
+const bf=S.buff&&S.buff.until>Date.now()?`<span class="buff">⚡ ${S.buff.name} ×${S.buff.mult} · ${Math.ceil((S.buff.until-Date.now())/1000)}s</span>`:'';if($('buffs').innerHTML!==bf)$('buffs').innerHTML=bf;
+const s2=[...B,...U].map(i=>(S.cookies>=cost(i)?1:0)+''+(S.bought[i.id]?1:0)).join('')+shopTab+sideTab+S.unlocked.length+Object.keys(S.bought).length;
+if(force||s2!==sig){sig=s2;shop();if(sideTab!=='games')side()}}
+function tickGames(){if(sideTab!=='games')return;document.querySelectorAll('.play[data-g]').forEach(b=>{const rem=Math.max(0,(S.cd[b.dataset.g]||0)-Date.now());b.disabled=rem>0;b.textContent=rem>0?Math.ceil(rem/1000)+'s':'Play'})}
+function schedGolden(){clearTimeout(gT);gT=setTimeout(showGolden,25000+Math.random()*35000)}
+function showGolden(){const g=$('golden');g.style.left=(4+Math.random()*74)+'%';g.style.top=(5+Math.random()*62)+'%';g.style.display='block';beep(990,.2,'triangle');clearTimeout(gH);gH=setTimeout(()=>{g.style.display='none';schedGolden()},9000)}
+function collect(){const g=$('golden');g.style.display='none';clearTimeout(gH);const r=Math.random(),c=Math.max(cps(),1);
+if(r<.4){const a=Math.max(25,Math.floor(Math.max(S.cookies,c*60,100)*.15));gain(a);say('🌟 Lucky! +'+fmt(a)+' cookies!')}
+else if(r<.7){gain(c*60);say('⚡ Production burst: 60 seconds of cookies!')}
+else if(r<.9){S.buff={name:'Frenzy',mult:7,until:Date.now()+30000};say('🔥 Frenzy! ×7 production & clicks for 30s!')}
+else{S.clickPower*=2;say('✨ Click power doubled permanently!')}
+beep(1200,.3,'triangle');check();paint(true);schedGolden()}
+function ascend(){const g=pAvail();if(g<=0||!confirm(`Ascend for ${g} heavenly chip(s)? Cookies, buildings and upgrades reset; chips, achievements and mini-game records stay.`))return;S.prestige+=g;Object.assign(S,{cookies:0,total:0,clicks:0,clickPower:1,buff:null});S.multiplier=1+S.prestige*.1;B.forEach(b=>S.buildings[b.id]=0);S.bought={};say('🌌 Ascended! +'+S.prestige*10+'% permanent production.');paint(true);persist()}
+/* ---------- Mini-games ---------- */
+const modal=$('modal'),box=$('box');let raf,iv;
+function open(h){box.innerHTML=h;modal.classList.add('show')}
+function close(g,cd){modal.classList.remove('show');cancelAnimationFrame(raf);clearInterval(iv);if(g)S.cd[g]=Date.now()+cd;check();paint(true);side();persist()}
+function done(g,cd,title,reward,extra=''){S.cd[g]=Date.now()+cd;gain(reward);beep(780,.3,'triangle');check();open(`<h2>${title}</h2><div class="big" style="font-size:2.4rem">+${fmt(reward)} 🍪</div><p class="muted">${extra}</p><button class="play" id="ok">Sweet!</button>`);$('ok').onclick=()=>close()}
+const floor=(m)=>Math.max(m,cps());
+function catchGame(){let score=0,t=15;open(`<h2>🍪 Cookie Catch</h2><p class="muted sm">Tap cookies, dodge the 🔥 burnt ones (−2)!</p><div class="muted">Time <b id="ct">15</b>s · Score <b id="cs">0</b></div><div class="arena" id="arena"></div>`);const ar=$('arena');
+const spawn=()=>{const d=document.createElement('button'),bad=Math.random()<.2;d.className='drop';d.textContent=bad?'🔥':'🍪';d.style.left=(Math.random()*85)+'%';d.style.animationDuration=(1.6+Math.random()*1.3)+'s';d.onpointerdown=e=>{e.preventDefault();score=Math.max(0,score+(bad?-2:1));$('cs').textContent=score;beep(bad?160:700,.07,bad?'sawtooth':'triangle');d.remove()};d.onanimationend=()=>d.remove();ar.appendChild(d)};
+let n=0;iv=setInterval(()=>{n++;spawn();if(n%2===0&&t<=7)spawn();if(n%2===0){t=Math.max(0,t-.8)}$('ct').textContent=Math.ceil(t);if(t<=0){clearInterval(iv);S.best.catch=Math.max(S.best.catch||0,score);done('catch',12e4,'Cookie Catch done!',Math.round(score*floor(5)*3+score*20),`You caught ${score} net cookies! Best: ${S.best.catch}`)}},400)}
+function bakeGame(){let round=0,total=0,pos=0,dir=1,speed=1.1,zl,zw;open(`<h2>🔥 Perfect Bake</h2><p class="muted sm">Stop the marker inside the green zone. Gold center = PERFECT!</p><div class="track" id="trk"><div class="zone" id="zn"><i></i></div><div class="mark" id="mk"></div></div><div class="muted">Bake <b id="br">1</b>/3 · Earned <b id="bt">0</b></div><button class="play" id="pull" style="font-size:1.2rem;padding:12px 30px">Pull out!</button>`);
+const set=()=>{zw=24-round*5;zl=8+Math.random()*(84-zw);$('zn').style.left=zl+'%';$('zn').style.width=zw+'%';speed=1.1+round*.5};set();
+const loop=()=>{pos+=dir*speed;if(pos>=100||pos<=0)dir*=-1;pos=Math.min(100,Math.max(0,pos));$('mk').style.left=`calc(${pos}% - 3px)`;raf=requestAnimationFrame(loop)};raf=requestAnimationFrame(loop);
+$('pull').onpointerdown=e=>{e.preventDefault();const c=zl+zw/2,inz=pos>=zl&&pos<=zl+zw,per=Math.abs(pos-c)<=zw*.15;let m=per?3:inz?1:0;if(per){S.best.perfect=(S.best.perfect||0)+1}total+=Math.round(m*floor(30)*2);beep(per?1000:inz?600:150,.15,'triangle');toast(per?'🌟 PERFECT!':inz?'👍 Nicely baked':'💨 Burnt!');round++;$('bt').textContent=fmt(total);if(round>=3){cancelAnimationFrame(raf);done('bake',9e4,'Bake complete!',total,`Perfect bakes so far: ${S.best.perfect||0}`)}else{$('br').textContent=round+1;set()}}}
+function wheelGame(){const P=[['🍪','10s of cookies',10],['🍪🍪','30s of cookies',30],['💰','2 minutes!',120],['⚡','Frenzy ×5 for 30s',0],['🍫','5s crumbs',5],['🎰','JACKPOT 5 minutes!',300]];const wt=[28,26,14,12,12,8];
+open(`<h2>🎡 Lucky Wheel</h2><div class="wheelwrap"><div class="ptr">🔻</div><div class="wheel" id="wh">${P.map((p,i)=>`<b style="--r:${i*60+30}deg">${p[0]}</b>`).join('')}</div></div><button class="play" id="spin" style="font-size:1.2rem;padding:12px 30px">Spin!</button>`);
+$('spin').onclick=()=>{$('spin').disabled=true;let r=Math.random()*100,i=0;for(;i<5;i++){if((r-=wt[i])<0)break}S.cd.wheel=Date.now()+18e4;const rot=360*6-(i*60+30);$('wh').style.transform=`rotate(${rot}deg)`;let k=0;const tk=setInterval(()=>{beep(300+(k++%6)*60,.04,'square',.03);if(k>26)clearInterval(tk)},150);
+setTimeout(()=>{const p=P[i];if(i===3){S.buff={name:'Lucky Frenzy',mult:5,until:Date.now()+3e4};open(`<h2>${p[0]} ${p[1]}</h2><p class="muted">Production and clicks are boosted!</p><button class="play" id="ok">Awesome</button>`);$('ok').onclick=()=>close();beep(900,.3,'triangle');paint(true)}else done('wheel',18e4,p[0]+' '+p[1],Math.max(50,Math.round(floor(2)*p[2])),'Come back in 3 minutes for another spin!')},4200)}}
+const GAMES=[{id:'catch',icon:'🧺',name:'Cookie Catch',desc:'Tap falling cookies for 15s.',run:catchGame,best:()=>S.best.catch?'Best: '+S.best.catch:''},{id:'bake',icon:'🔥',name:'Perfect Bake',desc:'Time the oven 3 times.',run:bakeGame,best:()=>S.best.perfect?'Perfect bakes: '+S.best.perfect:''},{id:'wheel',icon:'🎡',name:'Lucky Wheel',desc:'Spin for cookies or a frenzy.',run:wheelGame}];
+/* ---------- Save / load ---------- */
+function persist(){try{S.last=Date.now();localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function load(){try{const raw=localStorage.getItem(KEY);if(raw){const s=JSON.parse(raw),f=fresh();S={...f,...s,buildings:{...f.buildings,...s.buildings},bought:{...s.bought},unlocked:[...(s.unlocked||[])],cd:{...s.cd},best:{...s.best}}}}catch(e){}
+S.lifetime=S.lifetime||S.total||0;S.multiplier=Math.max(S.multiplier||1,1+S.prestige*.1);S.sound=!!S.sound;
+const away=Math.min(7200,(Date.now()-(S.last||Date.now()))/1000);if(away>60&&cps()>0){const g=cps()*away*.5;gain(g);setTimeout(()=>say(`Welcome back! Your bakers made ${fmt(g)} cookies while you were away.`),600)}}
+$('saveBtn').onclick=()=>{persist();say('Game saved in this browser.')};
+const snd=()=>$('soundBtn').textContent=S.sound?'🔊 Sound: On':'🔇 Sound: Off';
+$('soundBtn').onclick=()=>{S.sound=!S.sound;snd();beep(600,.1);toast(S.sound?'Sound on':'Sound off')};
+$('resetBtn').onclick=()=>{if(confirm('Reset your entire bakery? This deletes saved progress.')){try{localStorage.removeItem(KEY)}catch(e){}S=fresh();snd();paint(true);side();say('Fresh bakery! Start clicking.')}};
+$('golden').addEventListener('pointerdown',e=>{e.preventDefault();collect()});
+$('ascend').onclick=ascend;
+$('shopTabs').onclick=e=>{const t=e.target.closest('.tab');if(!t)return;shopTab=t.dataset.t;document.querySelectorAll('#shopTabs .tab').forEach(x=>x.classList.toggle('on',x===t));paint(true)};
+$('sideTabs').onclick=e=>{const t=e.target.closest('.tab');if(!t)return;sideTab=t.dataset.t;side()};
+modal.addEventListener('click',e=>{if(e.target===modal&&!$('spin')?.disabled&&!document.getElementById('arena')&&!document.getElementById('pull'))close()});
+load();snd();check();paint(true);side();schedGolden();
+let lt=Date.now();setInterval(()=>{const n=Date.now(),dt=(n-lt)/1000;lt=n;const g=cps()*dt;if(g>0){gain(g);check()}paint();tickGames()},100);
+setInterval(persist,10000);document.addEventListener('visibilitychange',()=>{if(document.hidden)persist()});
+</script>
+</body>
+</html>
